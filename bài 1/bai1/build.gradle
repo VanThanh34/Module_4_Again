@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group = 'com.example'
+version = '1.0-SNAPSHOT'
+
+repositories { mavenCentral() }
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+dependencies {
+    providedCompile 'jakarta.servlet:jakarta.servlet-api:5.0.0'   // hoặc 'compileOnly' với Gradle mới
+
+    implementation 'org.springframework:spring-webmvc:6.1.13'
+    implementation 'org.springframework:spring-context:6.1.13'
+    implementation 'org.springframework:spring-beans:6.1.13'
+
+    // JSP (nếu dùng JSP view)
+    providedCompile 'jakarta.servlet.jsp:jakarta.servlet.jsp-api:3.0.0'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:2.0.0'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly  'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+test { useJUnitPlatform() }
