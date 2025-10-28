@@ -9,8 +9,12 @@ import java.util.List;
 
 @Service
 public class PlayerService implements IPlayerService {
-    @Autowired
-    private IPlayerRepository iPlayerRepository;
+
+    private final IPlayerRepository iPlayerRepository;
+
+    public PlayerService(IPlayerRepository iPlayerRepository) {
+        this.iPlayerRepository = iPlayerRepository;
+    }
 
     @Override
     public List<Player> findAll() {
