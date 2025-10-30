@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <th:block th:fragment="library(title)">
+        <title th:text="${title}"></title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="icon" href="https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+        <style>
+            /* Navbar */
+            nav.navbar {
+                background-color: #b30000 !important;
+                padding: 10px 30px;
+                display: flex;
+                align-items: center;
+            }
+
+            /* Logo */
+            .navbar-brand img {
+                height: 70px; /* Giữ logo lớn nhưng không tràn */
+                width: auto;
+                object-fit: contain;
+                display: inline-block;
+                margin-right: 10px;
+            }
+
+            /* Chữ Manchester United FC */
+            .navbar-brand span {
+                color: white;
+                font-weight: 600;
+                font-size: 1.5rem;
+                vertical-align: middle;
+                display: inline-block;
+            }
+
+            /* Container căn giữa dọc */
+            .navbar .container {
+                display: flex;
+                align-items: center;
+            }
+
+            /* Link menu */
+            .navbar-nav .nav-link {
+                color: white !important;
+                font-weight: 500;
+                margin-right: 20px;
+            }
+
+            .navbar-nav .nav-link:hover {
+                color: #f1c40f !important;
+                text-decoration: underline;
+            }
+
+            /* Footer */
+            footer {
+                background-color: #1a1a1a;
+                color: #ccc;
+                text-align: center;
+                padding: 20px 0;
+                font-size: 14px;
+                margin-top: 40px;
+            }
+
+            footer a {
+                color: #ffcc00;
+                text-decoration: none;
+            }
+
+            footer a:hover {
+                color: #fff;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    </th:block>
+</head>
+
+<body>
+
+<!-- 🔴 Navbar Fragment -->
+<th:block th:fragment="navbar">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/players}">
+                <img src="https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg"
+                     alt="MU Logo">
+                <span>Manchester United FC</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon text-white"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/players}">Danh sách cầu thủ</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/players/add}">Thêm cầu thủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Thống kê</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Liên hệ</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</th:block>
+
+
+<!-- 🟡 Footer Fragment -->
+<th:block th:fragment="footer">
+    <footer>
+        <p>© 2025 Manchester United Fan Page | Thiết kế bởi <strong>Văn Thành</strong></p>
+        <p>
+            <a href="https://www.manutd.com" target="_blank">Trang chủ MU</a> |
+            <a href="https://www.facebook.com/manchesterunited" target="_blank">Facebook</a> |
+            <a href="https://www.instagram.com/manchesterunited/" target="_blank">Instagram</a>
+        </p>
+    </footer>
+</th:block>
+
+</body>
+</html>

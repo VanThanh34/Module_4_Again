@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:insert="~{layout/layout :: library('Danh sách cầu thủ bóng đá MU')}"/>
+
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 85%;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px 14px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #b30000;
+            color: white;
+        }
+
+        img {
+            width: 80px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        #message {
+            width: fit-content;
+            margin: 15px auto;
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+
+        .add-btn-container {
+            width: 85%;
+            margin: 20px auto 0;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-add {
+            background-color: #b30000;
+            border-color: #b30000;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add:hover {
+            background-color: #000;
+            border-color: #000;
+            color: #f1c40f;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+<th:block th:replace="~{layout/layout :: navbar}"></th:block>
+
+<h1 class="text-center mt-4">Danh sách cầu thủ bóng đá MU</h1>
+
+<div id="message" class="alert alert-success text-center"
+     th:if="${mess != null}" th:text="${mess}"></div>
+
+<!-- ✅ Nút thêm mới được canh bên phải, có hiệu ứng đẹp -->
+<div class="add-btn-container">
+    <a th:href="@{/students/add}" class="btn btn-add btn-lg shadow-sm px-4">
+        <i class="bi bi-plus-circle me-2"></i> Thêm cầu thủ mới
+    </a>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>STT</th>
+        <th>Avatar</th>
+        <th>Họ và tên</th>
+        <th>Ngày sinh</th>
+        <th>Kinh nghiệm</th>
+        <th>Vị trí</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="p, var : ${playerList}">
+        <td th:text="${var.index + 1}"></td>
+        <td><img th:src="${p.avatar}" th:alt="${p.name}"></td>
+        <td th:text="${p.name}"></td>
+        <td th:text="${p.dob}"></td>
+        <td th:text="${p.experience}"></td>
+        <td th:text="${p.position}"></td>
+        <td>
+            <a th:href="@{/players/detail/{id}(id=${p.id})}" class="btn btn-info btn-sm">Chi tiết</a>
+            <button type="button" class="btn btn-danger btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteModal"
+                    th:attr="data-id=${p.id}, data-name=${p.name}">
+                Xóa
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- Modal xác nhận xoá -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="deleteForm" th:method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Xác nhận xoá</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn xoá <strong id="playerName"></strong> không?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                    <button type="submit" class="btn btn-danger">Xoá</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const deleteModal = document.getElementById('deleteModal');
+    deleteModal.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget;
+        const id = button.getAttribute('data-id');
+        const name = button.getAttribute('data-name');
+        document.getElementById('playerName').textContent = name;
+        document.getElementById('deleteForm').setAttribute('action', '/players/delete/' + id);
+    });
+
+    const message = document.getElementById('message');
+    if (message) {
+        setTimeout(() => {
+            message.style.transition = "opacity 0.5s";
+            message.style.opacity = "0";
+            setTimeout(() => message.remove(), 500);
+        }, 3000);
+    }
+</script>
+
+<th:block th:replace="~{layout/layout :: footer}"></th:block>
+</body>
+</html>

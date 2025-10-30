@@ -1,0 +1,26 @@
+plugins {
+    id 'war'
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly('jakarta.servlet:jakarta.servlet-api:5.0.0')
+    // https://mvnrepository.com/artifact/org.springframework/spring-webmvc
+    implementation('org.springframework:spring-webmvc:6.2.10')
+
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
+ 
+}
+
+test {
+    useJUnitPlatform()
+}
