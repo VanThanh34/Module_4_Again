@@ -1,55 +1,15 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <th:block th:insert="~{layout/layout :: library('Chi tiết cầu thủ')}"/>
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .container {
-            max-width: 800px;
-            margin-top: 40px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-        }
-
-        .player-avatar {
-            width: 200px;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        .player-info h2 {
-            margin-bottom: 10px;
-            color: #b30000;
-        }
-
-        .player-info p {
-            font-size: 16px;
-            margin: 5px 0;
-        }
-
-        .btn-back {
-            background-color: #b30000;
-            color: white;
-        }
-
-        .btn-back:hover {
-            background-color: #990000;
-        }
-    </style>
+    <th:block th:replace="~{layout/layout :: library('Chi tiết cầu thủ')}"></th:block>
 </head>
 <body>
+
 <th:block th:replace="~{layout/layout :: navbar}"></th:block>
 
-<div class="container text-center">
+<div class="container text-center mt-4">
     <h1 class="mb-4">Thông tin chi tiết cầu thủ</h1>
-
     <div class="row align-items-center">
         <div class="col-md-5">
             <img th:src="${player.avatar}" th:alt="${player.name}" class="player-avatar img-fluid">
@@ -67,8 +27,7 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <th:block th:replace="~{layout/layout :: footer}"></th:block>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
