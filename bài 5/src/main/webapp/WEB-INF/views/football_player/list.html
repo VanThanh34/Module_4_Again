@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:replace="~{layout/layout :: library('Danh sách cầu thủ')}"></th:block>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        h2 {
+            color: #b30000;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .btn-add {
+            background-color: #b30000;
+            color: white;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .btn-add:hover {
+            background-color: #990000;
+        }
+
+        table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        thead {
+            background-color: #b30000;
+            color: white;
+        }
+
+        tbody tr:hover {
+            background-color: #f2f2f2;
+        }
+
+        td img {
+            width: 60px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+        }
+
+        .action-btns .btn {
+            margin-right: 6px;
+            border-radius: 6px;
+        }
+
+        .btn-detail {
+            background-color: #0069d9;
+            color: white;
+        }
+
+        .btn-detail:hover {
+            background-color: #004a9f;
+        }
+
+        .btn-edit {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .btn-edit:hover {
+            background-color: #e0a800;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #bb2d3b;
+        }
+    </style>
+</head>
+<body>
+
+<th:block th:replace="~{layout/layout :: navbar}"></th:block>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>🏆 Danh sách cầu thủ MU</h2>
+        <a th:href="@{/players/add}" class="btn btn-add">+ Thêm cầu thủ</a>
+    </div>
+
+    <table class="table table-hover align-middle text-center">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Ảnh</th>
+            <th>Tên cầu thủ</th>
+            <th>Ngày sinh</th>
+            <th>Vị trí</th>
+            <th>Kinh nghiệm</th>
+            <th>Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${players}">
+            <td th:text="${p.id}"></td>
+            <td><img th:src="${p.avatar}" alt="avatar"></td>
+            <td th:text="${p.name}"></td>
+            <td th:text="${p.dob}"></td>
+            <td th:text="${p.position}"></td>
+            <td th:text="${p.experience}"></td>
+            <td class="action-btns">
+                <a th:href="@{'/players/' + ${p.id}}" class="btn btn-detail btn-sm">Chi tiết</a>
+                <a th:href="@{'/players/delete/' + ${p.id}}" class="btn btn-delete btn-sm"
+                   onclick="return confirm('Xác nhận xóa cầu thủ này?')">Xóa</a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(players)}">
+            <td colspan="7" class="text-center text-muted">Chưa có cầu thủ nào trong danh sách.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<th:block th:replace="~{layout/layout :: footer}"></th:block>
+</body>
+</html>
