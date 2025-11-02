@@ -53,9 +53,9 @@ public class PlayerRepository implements IPlayerRepository {
 
     @Override
     public void deleteById(int id) {
-        for (Player player : playerList) {
-            if (player.getId() == id) {
-                playerList.remove(player);
+        for (int i = 0; i < playerList.size(); i++) {
+            if (playerList.get(i).getId() == id) {
+                playerList.remove(i);
                 break;
             }
         }
