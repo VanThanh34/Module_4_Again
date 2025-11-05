@@ -34,4 +34,8 @@ public class Player {
 
     @Column(name = "avatar", length = 250)
     private String avatar;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
 }

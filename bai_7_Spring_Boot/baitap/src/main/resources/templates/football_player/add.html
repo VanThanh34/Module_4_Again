@@ -7,6 +7,7 @@
         body {
             background-color: #f8f9fa;
         }
+
         .container {
             max-width: 700px;
             margin-top: 40px;
@@ -15,14 +16,17 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             padding: 30px;
         }
+
         h2 {
             color: #b30000;
             margin-bottom: 25px;
         }
+
         .btn-save {
             background-color: #b30000;
             color: white;
         }
+
         .btn-save:hover {
             background-color: #990000;
         }
@@ -52,6 +56,14 @@
             <div class="mb-3">
                 <label class="form-label">Vị trí</label>
                 <input type="text" class="form-control" th:field="*{position}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="team" class="form-label">Đội tuyển</label>
+                <select id="team" name="team.id" class="form-select" required>
+                    <option value="" disabled selected>-- Chọn đội tuyển --</option>
+                    <option th:each="t : ${teams}" th:value="${t.id}" th:text="${t.teamName}"></option>
+                </select>
             </div>
 
             <div class="mb-3">

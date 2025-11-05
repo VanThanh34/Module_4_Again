@@ -90,46 +90,106 @@
 <main>
 <th:block th:replace="~{layout/layout :: navbar}"></th:block>
 
-<div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>🏆 Danh sách cầu thủ MU</h2>
-        <a th:href="@{/players/add}" class="btn btn-add">+ Thêm cầu thủ</a>
+
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>🏆 Danh sách cầu thủ MU</h2>
+            <a th:href="@{/players/add}" class="btn btn-add">+ Thêm cầu thủ</a>
+        </div>
+
+        <form th:action="@{/players}" method="get" class="row mb-4 g-3 align-items-end">
+            <div class="col-md-3">
+                <input type="text" name="keyword" class="form-control"
+                       placeholder="🔍 Nhập tên cầu thủ..."
+                       th:value="${keyword}">
+            </div>
+            <div class="col-md-3">
+                <label for="startDate" class="form-label">Từ ngày sinh</label>
+                <input type="date" id="startDate" name="startDate" class="form-control"
+                       th:value="${startDate}">
+            </div>
+            <div class="col-md-3">
+                <label for="endDate" class="form-label">Đến ngày sinh</label>
+                <input type="date" id="endDate" name="endDate" class="form-control"
+                       th:value="${endDate}">
+            </div>
+            <div class="col-md-2">
+                <label for="size" class="form-label">Số cầu thủ/trang</label>
+                <input type="number" id="size" name="size" min="1" class="form-control"
+                       th:value="${size}">
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-add w-100">Tìm</button>
+            </div>
+        </form>
+<!--        <form th:action="@{/players}" method="get" class="d-flex align-items-center mb-3">-->
+<!--            <input type="hidden" name="page" value="0"/>-->
+<!--            <label for="size" class="me-2 fw-bold">Hiển thị mỗi trang:</label>-->
+<!--            <input type="number" id="size" name="size" min="1" th:value="${size}" class="form-control me-2" style="width: 100px;">-->
+<!--            <button type="submit" class="btn btn-add">Áp dụng</button>-->
+<!--        </form>-->
+
+        <!-- Bảng cầu thủ -->
+        <table class="table table-hover align-middle text-center">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Ảnh</th>
+                <th>Tên cầu thủ</th>
+                <th>Ngày sinh</th>
+                <th>Vị trí</th>
+                <th>Kinh nghiệm</th>
+                <th>Đội tuyển</th>
+                <th>Hành động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="p : ${playerList}">
+                <td th:text="${p.id}"></td>
+                <td><img th:src="${p.avatar}" alt="avatar"></td>
+                <td th:text="${p.name}"></td>
+                <td th:text="${p.dob}"></td>
+                <td th:text="${p.position}"></td>
+                <td th:text="${p.experience}"></td>
+                <td th:text="${p.team != null ? p.team.teamName : 'Chưa có đội'}"></td>
+                <td class="action-btns">
+                    <a th:href="@{'/players/' + ${p.id}}" class="btn btn-detail btn-sm">Chi tiết</a>
+                    <form th:action="@{'/players/delete/' + ${p.id}}" method="post" style="display:inline">
+                        <button type="submit" class="btn btn-delete btn-sm"
+                                onclick="return confirm('Xác nhận xóa cầu thủ này?')">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(playerList)}">
+                <td colspan="7" class="text-center text-muted">Chưa có cầu thủ nào trong danh sách.</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- PHÂN TRANG -->
+        <nav th:if="${totalPages > 1}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{|/players?page=${currentPage - 1}&size=${size}&keyword=${keyword}|}">Trước</a>
+                </li>
+
+                <li class="page-item"
+                    th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:classappend="${i == currentPage} ? 'active'">
+                    <a class="page-link"
+                       th:text="${i + 1}"
+                       th:href="@{|/players?page=${i}&size=${size}&keyword=${keyword}|}"></a>
+                </li>
+
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{|/players?page=${currentPage + 1}&size=${size}&keyword=${keyword}|}">Sau</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
-    <table class="table table-hover align-middle text-center">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Ảnh</th>
-            <th>Tên cầu thủ</th>
-            <th>Ngày sinh</th>
-            <th>Vị trí</th>
-            <th>Kinh nghiệm</th>
-            <th>Hành động</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="p : ${playerList}">
-            <td th:text="${p.id}"></td>
-            <td><img th:src="${p.avatar}" alt="avatar"></td>
-            <td th:text="${p.name}"></td>
-            <td th:text="${p.dob}"></td>
-            <td th:text="${p.position}"></td>
-            <td th:text="${p.experience}"></td>
-            <td class="action-btns">
-                <a th:href="@{'/players/' + ${p.id}}" class="btn btn-detail btn-sm">Chi tiết</a>
-                <form th:action="@{'/players/delete/' + ${p.id}}" method="post" style="display:inline">
-                    <button type="submit" class="btn btn-delete btn-sm"
-                            onclick="return confirm('Xác nhận xóa cầu thủ này?')">Xóa</button>
-                </form>
-            </td>
-        </tr>
-        <tr th:if="${playerList == null or #lists.isEmpty(playerList)}">
-            <td colspan="7" class="text-center text-muted">Chưa có cầu thủ nào trong danh sách.</td>
-        </tr>
-        </tbody>
-    </table>
-</div>
 </main>
 <th:block th:replace="~{layout/layout :: footer}"></th:block>
 
