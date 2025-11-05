@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Entity
 @Table(name = "teams")
 @Getter
@@ -15,11 +13,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Team {
+
     @Id
-    private Integer teamId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     @Column(name = "team_name", nullable = false, length = 100)
     private String teamName;
+
     @Column(name = "logo", length = 250)
     private String logo;
-
 }
