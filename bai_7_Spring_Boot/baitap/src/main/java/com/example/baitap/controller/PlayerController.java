@@ -1,18 +1,23 @@
 package com.example.baitap.controller;
 
 
+import com.example.baitap.dto.PlayerDto;
 import com.example.baitap.entity.Player;
 import com.example.baitap.service.IPlayerService;
 import com.example.baitap.service.ITeamService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Controller
@@ -61,13 +66,32 @@ public class PlayerController {
     public String addPlayer(Model model) {
         model.addAttribute("player", new Player());
         model.addAttribute("teams", iTeamService.findAll());
+        model.addAttribute("positions",
+                List.of("trung vệ", "hậu vệ", "tiền vệ", "tiền đạo", "thủ môn")
+        );
         return "football_player/add";
     }
 
     @PostMapping("/add")
-    public String addPlayer(@ModelAttribute Player player, RedirectAttributes redirectAttributes) {
+    public String addPlayer(
+            @Valid @ModelAttribute("player") PlayerDto playerDto,
+            BindingResult bindingResult,
+            Model model) {
+
+
+        if (!playerDto.isValidAge()) {
+            bindingResult.rejectValue("dob", "dob.invalid", "Tuổi phải từ 16 đến 100");
+        }
+
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("player", playerDto);
+            return "football_player/add";
+        }
+
+        Player player = new Player();
+        BeanUtils.copyProperties(playerDto,player);
         iPlayerService.save(player);
-        redirectAttributes.addFlashAttribute("mess", "Thêm mới cầu thủ thành công!");
         return "redirect:/players";
     }
 }

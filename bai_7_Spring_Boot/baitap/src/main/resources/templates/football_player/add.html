@@ -44,18 +44,33 @@
         <h2>📝 Thêm cầu thủ mới</h2>
         <form th:action="@{/players/add}" th:object="${player}" method="post">
             <div class="mb-3">
-                <label class="form-label">Tên cầu thủ</label>
-                <input type="text" class="form-control" th:field="*{name}" required>
+                <label>Tên cầu thủ</label>
+                <input type="text" class="form-control" th:field="*{name}">
+                <small class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Ngày sinh</label>
-                <input type="date" class="form-control" th:field="*{dob}" required>
+                <label>Ngày sinh</label>
+                <input type="date" class="form-control" th:field="*{dob}">
+                <small class="text-danger" th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}"></small>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Vị trí</label>
-                <input type="text" class="form-control" th:field="*{position}" required>
+                <label>Kinh nghiệm</label>
+                <input type="number" class="form-control" th:field="*{experience}">
+                <small class="text-danger" th:if="${#fields.hasErrors('experience')}" th:errors="*{experience}"></small>
+            </div>
+
+            <div>
+                <label th:for="*{position}">Vị trí:</label>
+                <select th:field="*{position}">
+                    <option value="">-- Chọn vị trí --</option>
+                    <option th:each="pos : ${positions}"
+                            th:value="${pos}"
+                            th:text="${pos}">
+                    </option>
+                </select>
+                <small class="text-danger" th:if="${#fields.hasErrors('position')}" th:errors="*{position}"></small>
             </div>
 
             <div class="mb-3">
@@ -67,19 +82,10 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Kinh nghiệm</label>
-                <input type="text" class="form-control" th:field="*{experience}" required>
-            </div>
-
-            <div class="mb-3">
                 <label class="form-label">Ảnh đại diện (URL)</label>
                 <input type="text" class="form-control" th:field="*{avatar}">
             </div>
-
-            <div class="d-flex justify-content-between">
-                <a th:href="@{/players}" class="btn btn-secondary">← Quay lại</a>
-                <button type="submit" class="btn btn-save">Lưu cầu thủ</button>
-            </div>
+            <button type="submit" class="btn btn-danger">Lưu</button>
         </form>
     </div>
 </main>
