@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:replace="~{layout/layout :: library('Chi tiết cầu thủ')}"></th:block>
+    <style>
+        body { background-color: #f8f9fa; }
+        .container {
+            max-width: 800px;
+            margin-top: 40px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        .player-avatar {
+            width: 220px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .player-info h2 { color: #b30000; margin-bottom: 10px; }
+        .player-info p { font-size: 16px; margin: 5px 0; }
+        .btn-back { background-color: #b30000; color: white; }
+        .btn-back:hover { background-color: #990000; }
+    </style>
+</head>
+
+<body class="bg-light">
+<!-- Navbar -->
+<header th:replace="~{layout/layout :: navbar}"></header>
+
+<main class="flex-grow-1 py-4">
+    <div class="container text-center">
+        <h1 class="mb-4">⚽ Thông tin chi tiết cầu thủ</h1>
+
+        <div class="row align-items-center">
+            <div class="col-md-5">
+                <img th:src="${player.avatar}" th:alt="${player.name}" class="player-avatar img-fluid">
+            </div>
+            <div class="col-md-7 text-start player-info">
+                <h2 th:text="${player.name}"></h2>
+                <p><strong>Ngày sinh:</strong> <span th:text="${player.dob}"></span></p>
+                <p><strong>Vị trí:</strong> <span th:text="${player.position}"></span></p>
+                <p><strong>Kinh nghiệm:</strong> <span th:text="${player.experience}"></span></p>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a th:href="@{/players}" class="btn btn-back">← Quay lại danh sách</a>
+        </div>
+    </div>
+</main>
+
+<th:block th:replace="~{layout/layout :: footer}"></th:block>
+</body>
+</html>
