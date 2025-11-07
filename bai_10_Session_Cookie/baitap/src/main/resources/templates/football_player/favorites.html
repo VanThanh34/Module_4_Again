@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:replace="~{layout/layout :: library('Cầu thủ yêu thích')}"></th:block>
+    <style>
+        body { background-color: #f8f9fa; }
+        .player-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        .player-card:hover {
+            transform: scale(1.03);
+        }
+        .player-avatar {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .btn-back {
+            background-color: #b30000;
+            color: white;
+        }
+        .btn-back:hover { background-color: #990000; }
+    </style>
+</head>
+
+<body>
+<header th:replace="~{layout/layout :: navbar}"></header>
+
+<main class="container py-4">
+    <h2 class="text-center mb-4">💖 Danh sách cầu thủ yêu thích</h2>
+
+    <!-- 🔹 Nếu có cầu thủ yêu thích -->
+    <div th:if="${favorites != null and !#lists.isEmpty(favorites)}">
+        <p class="text-center fw-bold mb-4" th:text="'Tổng số cầu thủ yêu thích: ' + ${#lists.size(favorites)}"></p>
+
+        <div class="row">
+            <div class="col-md-4" th:each="player : ${favorites}">
+                <div class="player-card text-center">
+                    <img th:src="${player.avatar}" th:alt="${player.name}" class="player-avatar mb-2">
+                    <h5 th:text="${player.name}"></h5>
+                    <p th:text="'Vị trí: ' + ${player.position}"></p>
+                    <a th:href="@{'/players/' + ${player.id}}" class="btn btn-outline-danger btn-sm">
+                        Xem chi tiết
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔹 Nếu chưa có cầu thủ nào -->
+    <div th:if="${favorites == null or #lists.isEmpty(favorites)}" class="text-center mt-5">
+        <p class="fs-5 text-muted">😢 Chưa có cầu thủ yêu thích nào cả!</p>
+        <a th:href="@{/players}" class="btn btn-back mt-3">← Quay lại danh sách cầu thủ</a>
+    </div>
+
+    <!-- 🔹 Nút quay lại -->
+    <div class="text-center mt-4" th:if="${favorites != null and !#lists.isEmpty(favorites)}">
+        <a th:href="@{/players}" class="btn btn-back">← Quay lại danh sách</a>
+    </div>
+</main>
+
+<th:block th:replace="~{layout/layout :: footer}"></th:block>
+</body>
+</html>
