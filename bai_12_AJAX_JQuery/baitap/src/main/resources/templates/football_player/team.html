@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:replace="~{layout/layout :: library('Đội bóng yêu thích')}"></th:block>
+    <style>
+        body { background-color: #f8f9fa; }
+        .container {
+            max-width: 900px;
+            margin-top: 40px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        .player-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+        .player-avatar {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .player-card {
+            transition: 0.2s ease-in-out;
+        }
+        .player-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .player-info h2 { color: #b30000; margin-bottom: 10px; }
+        .player-info p { font-size: 16px; margin: 5px 0; }
+        .btn-back { background-color: #b30000; color: white; }
+        .btn-back:hover { background-color: #990000; }
+    </style>
+</head>
+
+<body class="bg-light">
+<header th:replace="~{layout/layout :: navbar}"></header>
+
+<main class="flex-grow-1 py-4">
+    <div class="container text-center">
+        <h1 class="mb-4">⚽ Đội hình ra sân</h1>
+        <p class="text-muted fs-5 mb-4">
+            Hiện tại có <span class="fw-bold text-danger" th:text="${count}"></span>/11 cầu thủ trong đội hình.
+        </p>
+
+        <div class="row g-4">
+
+            <div class="col-md-4 col-lg-3" th:each="player : ${teamList}">
+                <div class="player-card h-100">
+                    <img th:src="${player.avatar}" th:alt="${player.name}" class="player-avatar img-fluid">
+                    <div class="player-info text-start mt-3">
+                        <h5 th:text="${player.name}" class="fw-bold text-danger"></h5>
+                        <p><strong>Vị trí:</strong> <span th:text="${player.position}"></span></p>
+                        <p><strong>Kinh nghiệm:</strong> <span th:text="${player.experience}"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a th:href="@{/players}" class="btn btn-back">← Quay lại danh sách</a>
+        </div>
+    </div>
+
+</main>
+
+<th:block th:replace="~{layout/layout :: footer}"></th:block>
+</body>
+</html>

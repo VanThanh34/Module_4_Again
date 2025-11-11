@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý cầu thủ</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+<h1>Danh sách cầu thủ</h1>
+
+
+<div style="margin-bottom: 20px;">
+    <input id="name" placeholder="Tên cầu thủ"><br>
+    <input type="date" id="dob" placeholder="Ngày sinh"><br>
+    <input type="number" id="exp" placeholder="Kinh nghiệm (năm)"><br>
+    <select id="position">
+        <option value="">-- Chọn vị trí --</option>
+        <option value="Thủ môn">Thủ môn</option>
+        <option value="Hậu vệ">Hậu vệ</option>
+        <option value="Tiền vệ">Tiền vệ</option>
+        <option value="Tiền đạo">Tiền đạo</option>
+    </select><br>
+    <input id="avatar" placeholder="URL ảnh đại diện"><br>
+    <button id="btn-save">Lưu cầu thủ</button>
+</div>
+
+
+<table border="1" style="border-collapse: collapse; width: 100%;">
+    <thead>
+    <tr>
+        <th>STT</th>
+        <th>Tên</th>
+        <th>Ngày sinh</th>
+        <th>Vị trí</th>
+        <th>Kinh nghiệm</th>
+        <th>Đội</th>
+    </tr>
+    </thead>
+    <tbody id="content"></tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        display();
+
+        $("#btn-save").click(function () {
+            let player = {
+                name: $("#name").val(),
+                dob: $("#dob").val(),
+                experience: $("#exp").val(),
+                position: $("#position").val(),
+                avatar: $("#avatar").val(),
+                favorite: false
+            };
+
+            $.ajax({
+                url: "http://localhost:8080/v1/api/players",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(player),
+                success: function () {
+                    alert("Thêm cầu thủ thành công!");
+                    display();
+                    clearForm();
+                },
+                error: function () {
+                    alert("Lỗi khi thêm cầu thủ!");
+                }
+            });
+        });
+
+
+        function display() {
+            $.ajax({
+                url: "http://localhost:8080/v1/api/players",
+                method: "GET",
+                dataType: "json",
+                success: function (data) {
+                    let content = "";
+                    for (let i = 0; i < data.length; i++) {
+                        let player = data[i];
+                        content += `
+                            <tr>
+                                <td>${i + 1}</td>
+                                <td>${player.name}</td>
+                                <td>${player.dob || ''}</td>
+                                <td>${player.position || ''}</td>
+                                <td>${player.experience || ''}</td>
+                                <td>${player.team ? player.team.teamName : 'Chưa có đội'}</td>
+                            </tr>`;
+                    }
+                    $("#content").html(content);
+                },
+                error: function () {
+                    $("#content").html("<tr><td colspan='6'>Không có dữ liệu cầu thủ</td></tr>");
+                }
+            });
+        }
+
+
+        function clearForm() {
+            $("#name").val('');
+            $("#dob").val('');
+            $("#exp").val('');
+            $("#position").val('');
+            $("#avatar").val('');
+        }
+    });
+</script>
+</body>
+</html>

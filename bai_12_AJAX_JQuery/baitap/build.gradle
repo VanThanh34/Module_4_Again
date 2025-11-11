@@ -35,8 +35,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    // https://mvnrepository.com/artifact/org.webjars.npm/jquery
-    implementation("org.webjars.npm:jquery:3.6.0")
 }
 
 tasks.named('test') {

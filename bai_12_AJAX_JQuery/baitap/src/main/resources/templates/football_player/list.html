@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:replace="~{layout/layout :: library('Danh sách cầu thủ')}"></th:block>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        h2 {
+            color: #b30000;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .btn-add {
+            background-color: #b30000;
+            color: white;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .btn-add:hover {
+            background-color: #990000;
+        }
+
+        table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        thead {
+            background-color: #b30000;
+            color: white;
+        }
+
+        tbody tr:hover {
+            background-color: #f2f2f2;
+        }
+
+        td img {
+            width: 60px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+        }
+
+        .action-btns .btn {
+            margin-right: 6px;
+            border-radius: 6px;
+        }
+
+        .btn-detail {
+            background-color: #0069d9;
+            color: white;
+        }
+
+        .btn-detail:hover {
+            background-color: #004a9f;
+        }
+
+        .btn-edit {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .btn-edit:hover {
+            background-color: #e0a800;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #bb2d3b;
+        }
+
+        .card {
+            border-radius: 12px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+    </style>
+</head>
+<body>
+<main>
+    <th:block th:replace="~{layout/layout :: navbar}"></th:block>
+
+
+    <div class="container" style="overflow-y: auto; max-height: 80vh;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>🏆 Danh sách cầu thủ MU</h2>
+            <div>
+                <a th:href="@{/players/add}" class="btn btn-add me-2">+ Thêm cầu thủ</a>
+                <a th:href="@{/players/team}" class="btn btn-add">+ Đội hình ra sân</a>
+                <a th:href="@{/players/favorites}" class="btn btn-add">+ Đội hình yêu thích</a>
+            </div>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger text-center fw-bold mt-3">
+            <span th:text="${errorMessage}"></span>
+        </div>
+
+        <!-- Form tìm kiếm -->
+        <form th:action="@{/players}" method="get" class="row mb-4 g-3 align-items-end">
+            <div class="col-md-3">
+                <input type="text" name="keyword" class="form-control"
+                       placeholder="🔍 Nhập tên cầu thủ..."
+                       th:value="${keyword}">
+            </div>
+            <div class="col-md-3">
+                <label for="startDate" class="form-label">Từ ngày sinh</label>
+                <input type="date" id="startDate" name="startDate" class="form-control"
+                       th:value="${startDate}">
+            </div>
+            <div class="col-md-3">
+                <label for="endDate" class="form-label">Đến ngày sinh</label>
+                <input type="date" id="endDate" name="endDate" class="form-control"
+                       th:value="${endDate}">
+            </div>
+            <div class="col-md-2">
+                <label for="size" class="form-label">Số cầu thủ/trang</label>
+                <input type="number" id="size" name="size" min="1" class="form-control"
+                       th:value="${size}">
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-add w-100">Tìm</button>
+            </div>
+        </form>
+
+        <!-- CARD VIEW -->
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col" th:each="p : ${playerList}">
+                <div class="card h-100 shadow-sm">
+                    <img th:src="${p.avatar}" class="card-img-top" alt="Avatar cầu thủ"
+                         style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title text-danger fw-bold" th:text="${p.name}"></h5>
+                        <p class="card-text mb-1"><strong>Vị trí:</strong> <span th:text="${p.position}"></span></p>
+                        <p class="card-text mb-1"><strong>Kinh nghiệm:</strong> <span th:text="${p.experience}"></span>
+                            năm</p>
+                        <p class="card-text">
+                            <strong>Trạng thái:</strong>
+                        <form th:action="@{'/players/toggle/' + ${p.id}}" method="post" style="display:inline">
+                            <input type="hidden" name="page" th:value="${currentPage}">
+                            <input type="hidden" name="size" th:value="${size}">
+                            <input type="hidden" name="keyword" th:value="${keyword}">
+                            <button type="submit" class="btn btn-sm border-0 bg-transparent p-0">
+                                    <span th:classappend="${p.status == 'Đã đăng ký'} ? 'badge bg-success' : 'badge bg-secondary'"
+                                          th:text="${p.status}"></span>
+                            </button>
+                        </form>
+
+                        </p>
+                    </div>
+                    <div class="card-footer text-center bg-white border-0">
+                        <a th:href="@{'/players/' + ${p.id}}" class="btn btn-detail btn-sm me-2">Chi tiết</a>
+                        <a th:href="@{'/players/edit/' + ${p.id}}" class="btn btn-edit btn-sm me-2">Sửa</a>
+                        <a th:href="@{'/players/delete/' + ${p.id}}"
+                           class="btn btn-delete btn-sm"
+                           onclick="return confirm('Xác nhận xoá cầu thủ này?')">Xoá</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PHÂN TRANG -->
+        <nav th:if="${totalPages > 1}" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{|/players?page=${currentPage - 1}&size=${size}&keyword=${keyword}|}">Trước</a>
+                </li>
+
+                <li class="page-item"
+                    th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:classappend="${i == currentPage} ? 'active'">
+                    <a class="page-link"
+                       th:text="${i + 1}"
+                       th:href="@{|/players?page=${i}&size=${size}&keyword=${keyword}|}"></a>
+                </li>
+
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{|/players?page=${currentPage + 1}&size=${size}&keyword=${keyword}|}">Sau</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+
+</main>
+<th:block th:replace="~{layout/layout :: footer}"></th:block>
+
+</body>
+</html>
