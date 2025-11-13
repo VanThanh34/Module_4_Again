@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Spring Security Filter Chain</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fff;
+            padding: 2rem;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .filter-card {
+            margin-bottom: .3rem;
+        }
+
+        .arrow-down {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #6c757d;
+            margin: .1rem 0;
+        }
+
+        .final-step {
+            text-align: center;
+            font-weight: 600;
+            border: 1px solid #ccc;
+            border-radius: .5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+        }
+
+        .card-header {
+            cursor: pointer;
+            background-color: #e8f5e9;
+        }
+
+        .card-header:hover {
+            background-color: #d0ebd0;
+        }
+
+        ul li {
+            font-size: small;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container w-50">
+    <!-- Client Card -->
+    <div class="card filter-card border-primary">
+        <div class="card-header bg-primary text-white">
+            <strong>[ Client ]</strong>
+        </div>
+        <div class="card-body">
+            <ul class="mb-0">
+                <li>① <code>POST /login</code> (username, password) ← <strong>Form Login</strong></li>
+                <li>② <code>Authorization: Bearer &lt;JWT token&gt;</code> ← <strong>JWT</strong></li>
+                <li>③ <code>Authorization: Basic base64(user:pass)</code> ← <strong>HTTP Basic</strong></li>
+                <li>④ <code>Redirect to /oauth2/authorization/google</code> ← <strong>OAuth2</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="arrow-down"><i class="bi bi-arrow-down-circle"></i></div>
+
+    <div class=" card-header border-primary bg-warning text-white mb-2 py-2">
+        <strong data-bs-toggle="collapse" data-bs-target="#filterChain" style="cursor:pointer;">🔐 SPRING SECURITY FILTER
+            CHAIN</strong>
+    </div>
+
+    <div id="filterChain" class="collapse show py-0">
+        <!-- Các filter -->
+        <div class="card filter-card py-1">
+            <div class="card-header py-0 " data-bs-toggle="collapse" data-bs-target="#f1">
+                <strong>1️⃣ SecurityContextPersistenceFilter</strong>
+            </div>
+            <div id="f1" class="collapse show">
+                <div class="card-body py-0">
+                    <ul class="my-0 py-0">
+                        <li>Lấy SecurityContext từ session (Form/Session)</li>
+                        <li>Hoặc để trống (JWT, Basic, OAuth2 sẽ đi qua các filter khác)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="arrow-down my-0"><i class="bi bi-arrow-down-circle"></i></div>
+        <div class="card filter-card">
+            <div class="card-header py-0" data-bs-toggle="collapse" data-bs-target="#f2"><strong>2️⃣
+                UsernamePasswordAuthenticationFilter</strong></div>
+            <div id="f2" class="collapse">
+                <div class="card-body">
+                    <ul class="my-0 py-0">
+                        <li>Đọc form <code>/login</code> (Form Login)</li>
+                        <li>Gọi DaoAuthenticationProvider → UserDetailsService</li>
+                        <li>Kiểm tra Database (user, password hash)</li>
+                        <li>Sinh Authentication object (success)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="arrow-down"><i class="bi bi-arrow-down-circle"></i></div>
+
+
+        <div class="card filter-card">
+            <div class="card-header py-0" data-bs-toggle="collapse" data-bs-target="#f3">
+                <strong>3️⃣ JwtAuthenticationFilter</strong>
+                <span class="mx-5 text-warning">(Optional)</span>
+            </div>
+            <div id="f3" class="collapse">
+                <div class="card-body">
+                    <ul class="my-0 py-0">
+                        <li>Kiểm tra header <code>Authorization: Bearer &lt;token&gt;</code></li>
+                        <li>Giải mã JWT, xác thực chữ ký, lấy user info</li>
+                        <li>Đặt Authentication vào SecurityContext</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="arrow-down"><i class="bi bi-arrow-down-circle"></i></div>
+        <div class="card filter-card">
+            <div class="card-header py-0" data-bs-toggle="collapse" data-bs-target="#f4"><strong>4️⃣
+                BasicAuthenticationFilter</strong>
+                <span class="mx-5 text-warning">(Optional)</span>
+            </div>
+            <div id="f4" class="collapse">
+                <div class="card-body">
+                    <ul class="my-0 py-0">
+                        <li>Kiểm tra header <code>Authorization: Basic &lt;base64&gt;</code></li>
+                        <li>Giải mã user:pass → Gọi UserDetailsService</li>
+                        <li>Sinh Authentication object</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="arrow-down"><i class="bi bi-arrow-down-circle"></i></div>
+        <div class="card filter-card">
+            <div class="card-header py-0" data-bs-toggle="collapse" data-bs-target="#f5"><strong>5️⃣
+                OAuth2LoginAuthenticationFilter</strong>
+                <span class="mx-0 text-warning">(Optional)</span>
+            </div>
+            <div id="f5" class="collapse">
+                <div class="card-body">
+                    <ul class="my-0 py-0">
+                        <li>Nhận callback từ provider (Google, Facebook...)</li>
+                        <li>Gọi OAuth2UserService → Tạo/Đăng nhập user</li>
+                        <li>Sinh Authentication (OAuth2AuthenticationToken)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="arrow-down"><i class="bi bi-arrow-down-circle"></i></div>
+        <div class="card filter-card">
+            <div class="card-header py-0" data-bs-toggle="collapse" data-bs-target="#f6"><strong>6️⃣
+                SessionManagementFilter</strong></div>
+            <div id="f6" class="collapse">
+                <div class="card-body">
+                    <ul class="my-0 py-0">
+                        <li>Lưu user vào session (nếu có)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="arrow-down"><i class="bi bi-arrow-down-circle"></i></div>
+        <div class="card filter-card">
+            <div class="card-header py-0" data-bs-toggle="collapse" data-bs-target="#f7"><strong>7️⃣
+                ExceptionTranslationFilter</strong></div>
+            <div id="f7" class="collapse">
+                <div class="card-body">
+                    <ul class="my-0 py-0">
+                        <li>Bắt lỗi <code>AuthenticationException</code> / <code>AccessDeniedException</code></li>
+                        <li>Chuyển hướng đến trang login hoặc trả JSON 401/403</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="arrow-down"><i class="bi bi-arrow-down-circle"></i></div>
+        <div class="card filter-card">
+            <div class="card-header py-0" data-bs-toggle="collapse" data-bs-target="#f8"><strong>8️⃣
+                FilterSecurityInterceptor</strong></div>
+            <div id="f8" class="collapse">
+                <div class="card-body">
+                    <ul class="my-0 py-0">
+                        <li>Kiểm tra quyền truy cập URL, Role, Authority</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="arrow-down"><i class="bi bi-arrow-down-circle-fill text-success"></i></div>
+    <div class="card-header bg-primary text-white final-step py-1 my-1">[ Dispatcher Servlet (FC) ]</div>
+    <div class="arrow-down"><i class="bi bi-arrow-down-circle-fill text-success"></i></div>
+    <div class=" card-header border-primary bg-success text-white mb-2 py-2">
+        <strong data-bs-toggle="collapse" data-bs-target="#" style="cursor:pointer;">🔐 INTERCEPTOR(IN8N)
+        </strong>
+    </div>
+    <div class="card-header bg-primary text-white final-step py-1 my-1">[ Controller /home hoặc /api/... ]</div>
+    <div class="card-header bg-primary text-white final-step py-1 my-1 ">(session giữ SecurityContext hoặc JWT đính kèm
+        request)
+    </div>
+    <div class=" card-header bg-primary text-white final-step py-1 my-1">[ Response HTML view hoặc JSON response ]</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

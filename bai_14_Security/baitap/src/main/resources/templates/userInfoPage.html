@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông tin người dùng</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 30px; }
+        table { margin: 0 auto; border-collapse: collapse; }
+        td, th { border: 1px solid #aaa; padding: 8px 16px; }
+    </style>
+</head>
+<body>
+<h2>Thông tin người dùng</h2>
+
+<table>
+    <tr><th>Tên người dùng</th><td th:text="${username}"></td></tr>
+    <tr><th>Quyền</th><td th:text="${roles}"></td></tr>
+</table>
+
+<div style="margin-top:20px;">
+    <a th:href="@{/players}">Trang chủ</a> |
+    <a th:href="@{/logout}">Đăng xuất</a>
+</div>
+
+<div sec:authorize="hasRole('ADMIN')" style="margin-top:20px; color:green;">
+    ⚙️ Bạn có quyền ADMIN
+</div>
+<div sec:authorize="hasRole('USER')" style="margin-top:20px; color:blue;">
+    👤 Bạn có quyền USER
+</div>
+</body>
+</html>

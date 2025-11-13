@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang Admin</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 40px; }
+        a { text-decoration: none; color: blue; margin: 10px; }
+    </style>
+</head>
+<body>
+<h2>Khu vực dành riêng cho Admin 👑</h2>
+
+<p th:text="${userInfo}"></p>
+
+<div style="margin-top:20px;">
+    <a th:href="@{/players}">Trang chủ</a> |
+    <a th:href="@{/logout}">Đăng xuất</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang chủ</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 30px; }
+        a { text-decoration: none; color: blue; margin: 10px; }
+    </style>
+</head>
+<body>
+<h1>Chào mừng bạn đến với Website!</h1>
+<p th:text="${message}"></p>
+
+<div>
+    <a th:href="@{/login}">Đăng nhập</a> |
+    <a th:href="@{/logout}">Đăng xuất</a> |
+    <a th:href="@{/userInfo}">Thông tin người dùng</a> |
+    <a th:href="@{/admin}">Trang Admin</a>
+    <a th:href="@{/players}">Trang Chủ</a>
+</div>
+</body>
+</html>

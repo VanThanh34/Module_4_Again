@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng xuất thành công</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        a { text-decoration: none; color: blue; margin: 10px; }
+    </style>
+</head>
+<body>
+<h2>Bạn đã đăng xuất thành công!</h2>
+<p>Cảm ơn bạn đã sử dụng hệ thống 💙</p>
+
+<a th:href="@{/login}">Đăng nhập lại</a> |
+<a th:href="@{/welcome}">Về trang chủ</a>
+</body>
+</html>

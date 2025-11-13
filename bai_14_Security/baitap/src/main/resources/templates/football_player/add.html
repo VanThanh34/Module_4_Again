@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:replace="~{layout/layout :: library('Thêm cầu thủ')}"></th:block>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 700px;
+            margin-top: 40px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        h2 {
+            color: #b30000;
+            margin-bottom: 25px;
+        }
+
+        .btn-save {
+            background-color: #b30000;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background-color: #990000;
+        }
+    </style>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+<!-- ✅ Navbar -->
+<th:block th:replace="~{layout/layout :: navbar}"></th:block>
+
+<!-- ✅ Nội dung chính -->
+<main class="flex-grow-1 py-4">
+    <div class="container">
+        <h2>📝 Thêm cầu thủ mới</h2>
+        <form th:action="@{/players/add}" th:object="${player}" method="post">
+            <div class="mb-3">
+                <label>Tên cầu thủ</label>
+                <input type="text" class="form-control" th:field="*{name}">
+                <small class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
+            </div>
+
+            <div class="mb-3">
+                <label>Ngày sinh</label>
+                <input type="date" class="form-control" th:field="*{dob}">
+                <small class="text-danger" th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}"></small>
+            </div>
+
+            <div class="mb-3">
+                <label>Kinh nghiệm</label>
+                <input type="number" class="form-control" th:field="*{experience}">
+                <small class="text-danger" th:if="${#fields.hasErrors('experience')}" th:errors="*{experience}"></small>
+            </div>
+
+            <div>
+                <label th:for="*{position}">Vị trí:</label>
+                <select th:field="*{position}">
+                    <option value="">-- Chọn vị trí --</option>
+                    <option th:each="pos : ${positions}"
+                            th:value="${pos}"
+                            th:text="${pos}">
+                    </option>
+                </select>
+                <small class="text-danger" th:if="${#fields.hasErrors('position')}" th:errors="*{position}"></small>
+            </div>
+
+            <div class="mb-3">
+                <label for="team" class="form-label">Đội tuyển</label>
+                <select id="team" name="team.id" class="form-select" required>
+                    <option value="" disabled selected>-- Chọn đội tuyển --</option>
+                    <option th:each="t : ${teams}" th:value="${t.id}" th:text="${t.teamName}"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Ảnh đại diện (URL)</label>
+                <input type="text" class="form-control" th:field="*{avatar}">
+            </div>
+            <button type="submit" class="btn btn-danger">Lưu</button>
+        </form>
+    </div>
+</main>
+
+<!-- ✅ Footer -->
+<th:block th:replace="~{layout/layout :: footer}"></th:block>
+
+</body>
+</html>

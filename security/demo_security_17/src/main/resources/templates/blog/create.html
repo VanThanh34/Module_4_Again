@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Trang thêm mới</h1>
+<form  action="/blog/create" method="post">
+
+<!--    <input type="hidden"-->
+<!--           th:name="${_csrf.parameterName}"-->
+<!--           th:value="${_csrf.token}"/>-->
+    Title
+    <input name="title"><br>
+    Content
+    <textarea cols="10" rows="3"  name="content"></textarea>
+    <button>Post</button>
+</form>
+</body>
+</html>

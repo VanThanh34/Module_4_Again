@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+        .font-title {
+            font-family: 'Dancing Script';
+            font-size: 25px;
+            font-weight: bold;
+            text-align: center;
+            color: indigo;
+        }
+        img{
+            transform: scale(0.7);
+        }
+        img:hover{
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+            transform: scale(1.0);
+            z-index: 1;
+        }
+    </style>
+
+</head>
+<body>
+
+<th:block th:replace="~{_menu::mainMenu}"></th:block>
+<div class="row d-flex justify-content-center">
+    <div th:each="blog:${blogList}" class="card m-3" style="width: 18rem;">
+        <img th:src="${blog.getImg()}" class="card-img-top mt-3" alt="...">
+        <div class="card-body">
+            <h5 th:text="${blog.title}" class="card-title font-title"></h5>
+            <p th:text="${blog.content}" class="card-text"></p>
+            <div class="d-flex justify-content-between">
+                <a href="#"><img width="20" height="20" src="https://img.icons8.com/dusk/64/facebook-like.png" alt="facebook-like"/></a>
+                <a href="#"><img width="22" height="22" src="https://img.icons8.com/color/48/hearts.png" alt="hearts"/></a>
+                <span style="font-style: italic;color: darkslateblue">Tác giả: </span>
+                <span style="color: red;font-style: italic" th:text="${blog.appUser.getUserName()}"></span>
+            </div>
+            <div class="d-flex justify-content-center mt-1">
+                <a sec:authorize="isAuthenticated()" class="btn btn-sm btn-outline-primary">Chỉnh sửa</a>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid my-0">
+    <footer class="bg-dark text-center text-white">
+
+        <div class="container p-4 pb-0">
+
+            <section class="mb-4">
+
+                <a class="btn btn-outline-light btn-floating m-1 rounded-circle border-secondary" href="#!" role="button"
+                >
+                    <img width="25" height="25" src="https://img.icons8.com/fluency/48/facebook-new.png" alt="facebook-new"/>
+                </a>
+
+                <a class="btn btn-outline-light btn-floating m-1 rounded-circle border-secondary" href="#!" role="button"
+                >
+                    <img width="25" height="25" src="https://img.icons8.com/fluency/48/google-plus.png" alt="google-plus"/>
+                </a>
+
+                <a class="btn btn-outline-light btn-floating m-1 rounded-circle border-secondary" href="#!" role="button"
+                >
+                    <img width="25" height="25" src="https://img.icons8.com/fluency/48/tiktok.png" alt="tiktok"/>
+                </a>
+
+                <a class="btn btn-outline-light btn-floating m-1 rounded-circle border-secondary" href="#!" role="button"
+                >
+                    <img width="25" height="25" src="https://img.icons8.com/fluency/48/youtube.png" alt="youtube"/>
+                </a>
+
+                <a class="btn btn-outline-light btn-floating m-1 rounded-circle border-secondary" href="#!" role="button"
+                >
+                    <img width="25" height="25" src="https://img.icons8.com/fluency/48/twitter-circled.png" alt="twitter-circled"/>
+                </a>
+
+                <a class="btn btn-outline-light btn-floating m-1 rounded-circle border-secondary" href="#!" role="button"
+                ><img width="25" height="25" src="https://img.icons8.com/fluency/48/facebook-messenger--v2.png" alt="facebook-messenger--v2"/>
+                </a>
+            </section>
+        </div>
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+            © website :
+            <a class="text-white" href="http://localhost:8080/blog"> http://blog.com</a>
+        </div>
+    </footer>
+</div>
+</div>
+</body>
+</html>

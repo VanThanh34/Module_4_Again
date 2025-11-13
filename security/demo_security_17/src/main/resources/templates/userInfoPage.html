@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Info</title>
+</head>
+<body>
+<th:block th:replace="~{_menu::mainMenu}"></th:block>
+
+<h2>Thông tin ngươi dùng</h2>
+<b>This is protected page!</b><br/>
+<span>Username: </span>
+<span th:if="${username != null}" th:text="${username}"></span><br>
+<span>Role list: </span>
+<span th:if="${!roles.isEmpty()}" th:each="role:${roles}" th:text="${roles} "></span>
+</body>
+</html>

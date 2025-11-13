@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <script
+            src="https://code.jquery.com/jquery-3.6.3.js"
+            integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<th:block th:replace="~{_menu::mainMenu}"></th:block>
+
+<h1>Login</h1>
+
+<h3>Enter username and password:</h3>
+<form name='f' th:action="@{/process-login}" method='POST'>
+    <table>
+        <tr>
+            <td>User:</td>
+            <td><input type='text' name='username' value=''></td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td><input type='password' name='password' /></td>
+        </tr>
+<!--        <tr>-->
+<!--            <td>Remember Me?</td>-->
+<!--            <td><input type="checkbox" name="remember-me"/></td>-->
+
+<!--            <input type="hidden"-->
+<!--                   name="${_csrf.parameterName}"-->
+<!--                   value="${_csrf.token}"/>-->
+<!--            </td>-->
+<!--        </tr>-->
+        <tr>
+            <td><input id="btn" name="submit" type="submit" value="submit" /></td>
+        </tr>
+    </table>
+</form>
+
+</body>
+
+</html>
